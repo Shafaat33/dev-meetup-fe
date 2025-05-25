@@ -3,23 +3,26 @@ import axios from 'axios';
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 
 const Login = () => {
   const [emailId, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post('http://localhost:3001/login',{
+      const res = await axios.post(`${BASE_URL}/login`,{
         emailId,
         password,
       }, { withCredentials: true });
       dispatch(addUser(res.data));
       navigate('/');
     } catch (error) {
+      setError(error?.response?.data);
       console.log(error);
     }
   };
@@ -82,6 +85,7 @@ const Login = () => {
             Must be more than 8 characters, including
             <br/>At least one number <br/>At least one lowercase letter <br/>At least one uppercase letter
           </p>
+          {error && <div className="text-red-500">{error}</div>}
           <div className="card-actions justify-end">
             <button
               className="btn btn-wide"
