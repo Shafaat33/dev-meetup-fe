@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../utils/requestSlice";
+import { addRequests, removeRequest } from "../utils/requestSlice";
 
 const Requests = () => {
   const dispatch = useDispatch();
@@ -16,7 +16,17 @@ const Requests = () => {
     catch (error) {
       console.log(error);
     }
-  }
+  };
+  
+  const handleRequest = async (status, requestId) => {
+    try {
+      await axios.post(BASE_URL + '/request/receive/' + status + '/' + requestId , {}, { withCredentials: true });
+      dispatch(removeRequest(requestId));
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
   
   useEffect(() => {
     fetchConnection();
@@ -46,8 +56,8 @@ const Requests = () => {
               <p>{about}</p>
             </div>
             <div>
-              <button className="mx-5 btn btn-primary">Ignore</button>
-              <button className="btn btn-secondary">Interested</button>
+              <button onClick={() => handleRequest('rejected', request._id)} className="mx-5 btn btn-primary">Reject</button>
+              <button onClick={() => handleRequest('accepted', request._id)} className="btn btn-secondary">Accept</button>
             </div>
           </div>
         )

@@ -26,7 +26,7 @@ const Connections = () => {
   
   return (
     <div className='text-center my-10'>
-      <h1 className='text-bold text-2xl'>Connection Requests</h1>
+      <h1 className='text-bold text-2xl'>Connections</h1>
       {connections.map((connection) => {
         const { _id, firstName, lastName, age, gender, photoUrl, about } = connection;
         return (
