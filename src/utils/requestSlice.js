@@ -10,7 +10,7 @@ export const requestSlice = createSlice({
       state.requests = action.payload;
     },
     removeRequest: (state, action) => {
-      state.requests = state.requests.filter((request) => request.id !== action.payload);
+      state.requests = state.requests.filter((request) => request._id !== action.payload);
     },
   },
 });

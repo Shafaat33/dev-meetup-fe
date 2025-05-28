@@ -22,9 +22,13 @@ const Feed = () => {
     !feed?.length && getFeed();
   }, []);
   
+  if (feed?.length <= 0) {
+    return <h1>No new user found</h1>;
+  }
+  
   return (
     <div className='flex justify-center my-5'>
-      {feed?.length > 0 && <UserCard feed={feed[6]}/>}
+      {feed?.length > 0 && <UserCard feed={feed[0]}/>}
     </div>
   )
 };
