@@ -9,7 +9,10 @@ import { BASE_URL } from "../utils/constants";
 const Login = () => {
   const [emailId, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
@@ -26,12 +29,72 @@ const Login = () => {
       console.log(error);
     }
   };
+  
+  const handleSignUp = async () => {
+    try {
+      const res = await axios.post(`${BASE_URL}/signup`,{
+        firstName,
+        lastName,
+        emailId,
+        password,
+      }, { withCredentials: true });
+      dispatch(addUser(res.data?.user));
+      navigate('/profile');
+    } catch (error) {
+      setError(error?.response?.data);
+      console.log(error);
+    }
+  };
 
   return (
     <div className='flex justify-center my-5'>
       <div className="card bg-base-300 w-120">
         <div className="card-body items-center text-center">
-          <h1 className='text-xl my-5'>Login</h1>
+          <h1 className='text-xl my-5'>{isLoginForm ? 'Login' : 'SignUp'}</h1>
+          {!isLoginForm && <>
+            <label className="input validator mx-10">
+              <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </g>
+              </svg>
+              <input
+                value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
+                type="input"
+                placeholder="jhon"
+                required
+              />
+            </label>
+            <label className="input validator mx-10">
+              <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                  strokeWidth="2.5"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </g>
+              </svg>
+              <input
+                value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
+                type="input"
+                placeholder="khan"
+                required
+              />
+            </label>
+          </>}
           <label className="input validator mx-10">
             <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <g
@@ -89,10 +152,16 @@ const Login = () => {
           <div className="card-actions justify-end">
             <button
               className="btn btn-wide"
-              onClick={handleLogin}
+              onClick={isLoginForm ? handleLogin : handleSignUp}
             >
-              Login
+              {isLoginForm ? 'Login' : 'SignUp'}
             </button>
+          </div>
+          <div
+            onClick={() => setIsLoginForm((prevLogin) => !prevLogin)}
+            className="my-5 cursor-pointer"
+          >
+            {isLoginForm ? 'New user? click here to signup' : 'Already have account? click here to login'}
           </div>
         </div>
       </div>

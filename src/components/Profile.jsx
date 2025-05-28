@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import UserCard from "./UserCard";
-
+import {addUser} from "../utils/userSlice";
 
 const Profile = () => {
-  
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user.user);
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
-  const [age, setAge] = useState(user.age);
-  const [gender, setGender] = useState(user.gender);
-  const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-  const [about, setAbout] = useState(user.about);
+  const [firstName, setFirstName] = useState(user?.firstName);
+  const [lastName, setLastName] = useState(user?.lastName);
+  const [age, setAge] = useState(user?.age || "");
+  const [gender, setGender] = useState(user?.gender || "");
+  const [photoUrl, setPhotoUrl] = useState(user?.photoUrl || "");
+  const [about, setAbout] = useState(user?.about);
   const [error, setError] = useState("");
   const [showInfo, setShowInfo] = useState(false);
   
@@ -28,6 +28,7 @@ const Profile = () => {
         photoUrl,
       }, { withCredentials: true });
       setShowInfo(true);
+      dispatch(addUser(res?.data?.updatedUser));
       setTimeout(() => {
         setShowInfo(false);
       }, 3000);
@@ -114,12 +115,13 @@ const Profile = () => {
         </div>
         <UserCard
           feed={{ firstName, lastName, photoUrl, about, gender, age }}
+          isProfileVeiw
         />
       </div>
       {showInfo && (
         <div className="toast toast-top toast-center">
           <div className="alert alert-success">
-            <span>Message sent successfully.</span>
+            <span>profile updated successfully.</span>
           </div>
         </div>
       )}

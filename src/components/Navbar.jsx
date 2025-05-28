@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import profilePhoto from "./../assets/profilePic.png";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user.user);
@@ -27,15 +28,15 @@ const Navbar = () => {
       <div className="flex-1">
         <Link to='/' className="btn btn-ghost text-xl">DevTinder</Link>
       </div>
-      {user?.photoUrl && (
+      {user?._id && (
         <div className="flex-none gap-2">
           <div className="dropdown dropdown-end mx-5 flex">
             <div className='form-control'>welcome {user?.firstName}</div>
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
-                  alt="user phot"
-                  src={user.photoUrl} />
+                  alt="user photo"
+                  src={user.photoUrl || profilePhoto} />
               </div>
             </div>
             <ul
