@@ -8,6 +8,7 @@ import Feed from "./components/Feed";
 import Profile from "./components/Profile";
 import Connections from "./components/Connections";
 import Requests from "./components/Request";
+import ChatPage from "./components/chat";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/connections' element={<Connections />} />
               <Route path='/requests' element={<Requests />} />
+              <Route path='/chat/:chatId' element={<ChatPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
