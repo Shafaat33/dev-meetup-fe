@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import {BASE_URL} from "../utils/constants";
+import { BASE_URL } from "../utils/constants";
+import { SendHorizonal } from 'lucide-react';
 
-const ChatPage = (props) => {
-  const { isLoading } = props;
+const ChatPage = () => {
   const { chatId } = useParams();
+  const location = useLocation();
   const user = useSelector((store) => store.user.user);
   const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
-  const { firstName, _id, photoUrl } = user;
+  const { firstName, _id } = user;
+  const { receiverName, photo } = location.state;
   
   const fetchChatMessages = async () => {
+    setIsLoading(true);
     const chat = await axios.get(BASE_URL + '/chat/' + chatId, { withCredentials: true });
     
     const chatMessages = chat?.data?.messages?.map((message) => {
@@ -25,7 +29,8 @@ const ChatPage = (props) => {
       }
     });
     setMessages(chatMessages);
-  }
+    setIsLoading(false);
+  };
   
   useEffect(() => {
     fetchChatMessages();
@@ -51,8 +56,16 @@ const ChatPage = (props) => {
   return (
     <div className="min-h-200 flex flex-col">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
-        <h1 className="text-xl font-semibold text-gray-800">Real-time Chat</h1>
+      <div className="sticky top-0 z-10 bg-base-200/70 border-b border-gray-200 p-4 gap-6">
+        <div className="chat-image avatar gap-4">
+          <div className="w-10 rounded-full">
+            <img
+              alt="Tailwind CSS chat bubble component"
+              src={photo}
+            />
+          </div>
+          <h1 className="text-xl font-semibold text-gray-800 gap-2"> { receiverName }</h1>
+        </div>
       </div>
       
       {/* Messages Container */}
@@ -88,22 +101,21 @@ const ChatPage = (props) => {
           <div className="flex justify-start">
             <div className="bg-white text-gray-800 border border-gray-200 max-w-xs lg:max-w-md px-4 py-2 rounded-lg">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
                 <div
                   className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
                   style={{ animationDelay: "0.1s" }}
-                ></div>
+                />
                 <div
                   className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
                   style={{ animationDelay: "0.2s" }}
-                ></div>
+                />
               </div>
             </div>
           </div>
         )}
       </div>
       
-      {/* Input Area */}
       <div className="sticky bottom-0 z-10 bg-white border-t border-gray-200 p-4">
         <form onSubmit={handleSendMessage} className="flex space-x-2">
           <input
@@ -118,7 +130,7 @@ const ChatPage = (props) => {
             disabled={isLoading || !newMessage.trim()}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
           >
-            Send
+            <SendHorizonal />
           </button>
         </form>
       </div>

@@ -4,6 +4,7 @@ import { BASE_URL } from "../utils/constants";
 import { addFeed } from "../utils/feedSlice";
 import { useDispatch, useSelector } from "react-redux";
 import UserCard from "./UserCard";
+import NoMatchesFound from "../utils/NoMatchFound";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const Feed = () => {
   }, []);
   
   if (feed?.length <= 0) {
-    return <h1>No new user found</h1>;
+    return <NoMatchesFound matchKey='User' />;
   }
   
   return (

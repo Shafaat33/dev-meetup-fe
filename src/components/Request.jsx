@@ -3,6 +3,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestSlice";
+import NoMatchesFound from "../utils/NoMatchFound";
 
 const Requests = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Requests = () => {
     fetchConnection();
   }, []);
   
-  if (!requests.length) return <p>No request found</p>
+  if (!requests.length) return <NoMatchesFound matchKey='Requests' />
   
   return (
     <div className='text-center my-10'>

@@ -30,7 +30,7 @@ const Navbar = () => {
       </div>
       {user?._id && (
         <div className="flex-none gap-2">
-          <div className="dropdown dropdown-end mx-5 flex">
+          <div className="dropdown dropdown-end mx-5 flex gap-4">
             <div className='form-control'>welcome {user?.firstName}</div>
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">

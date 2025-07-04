@@ -75,12 +75,13 @@ const Connections = () => {
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
           {filteredConnections.map((person, idx) => {
             const { _id, firstName, photoUrl, about } = person;
+            const photo = photoUrl || profilePhoto;
             return (
               <div key={idx} className="card bg-base-100 border shadow-sm">
                 <div className="card-body p-2">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <img src={photoUrl || profilePhoto} alt='profile photo' className="w-12 h-12 bg-gray-200 rounded-full" />
+                      <img src={photo} alt='profile photo' className="w-12 h-12 bg-gray-200 rounded-full" />
                       <div>
                         <h2 className="font-semibold text-md">{firstName}</h2>
                         <p className="text-sm text-gray-500">{about}</p>
@@ -98,7 +99,7 @@ const Connections = () => {
                   </div>
             
                   <div className="mt-4 flex gap-2">
-                    <button onClick={() => Navigate('/chat/' + _id)} className="btn btn-primary btn-sm flex-1">
+                    <button onClick={() => Navigate('/chat/' + _id, { state: { receiverName: firstName, photo: photo } })} className="btn btn-primary btn-sm flex-1">
                       <MessageCircle className="w-4 h-4 mr-1" />
                       Chat
                     </button>
@@ -115,7 +116,7 @@ const Connections = () => {
           })}
         </div>
       ) : (
-        <NoMatchesFound searchTerm={searchTerm} onClearSearch={clearSearch}/>
+        <NoMatchesFound searchTerm={searchTerm} onClearSearch={clearSearch} matchKey='matches'/>
       )}
     </div>
   );
